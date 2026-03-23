@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- UYGULAMA İKONU -->
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- ICON -->
   <link rel="icon" href="production.png">
   <link rel="apple-touch-icon" href="production.png">
 
-  <!-- MOBİL UYGULAMA AYARLARI -->
+  <!-- MOBİL APP -->
   <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Üretim">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -17,10 +21,7 @@
   <title>Üretim Girişi</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
 
     body {
       margin: 0;
@@ -35,9 +36,9 @@
     .container {
       width: 100%;
       max-width: 420px;
-      background: #ffffff;
+      background: #fff;
       border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
       overflow: hidden;
     }
 
@@ -50,16 +51,13 @@
       font-weight: bold;
     }
 
-    .form-area {
-      padding: 20px;
-    }
+    .form-area { padding: 20px; }
 
     label {
       display: block;
       font-size: 15px;
       font-weight: 600;
-      margin-bottom: 8px;
-      margin-top: 14px;
+      margin: 14px 0 8px;
       color: #111827;
     }
 
@@ -69,12 +67,7 @@
       border: 1px solid #d1d5db;
       border-radius: 12px;
       font-size: 16px;
-      outline: none;
       background: white;
-    }
-
-    input:focus, select:focus {
-      border-color: #2563eb;
     }
 
     button {
@@ -87,97 +80,80 @@
       color: white;
       font-size: 18px;
       font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #15803d;
     }
 
     .message {
       margin-top: 16px;
       text-align: center;
-      font-size: 15px;
       font-weight: 600;
       min-height: 22px;
     }
 
-    .success {
-      color: #15803d;
-    }
-
-    .error {
-      color: #dc2626;
-    }
+    .success { color: #15803d; }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="header">Üretim Girişi</div>
+<div class="container">
+  <div class="header">Üretim Girişi</div>
 
-    <div class="form-area">
-      <form
-        id="uretimForm"
-        action="https://script.google.com/macros/s/AKfycbwuJLo1oYX50R9OoPywegWtwCPaRdMmcTpm4U8FnXVqvwaDHpauOp9BMxFWnmbPTOl1/exec"
-        method="POST"
-        target="gizliFrame"
-      >
-        <label for="tarih">Tarih</label>
-        <input type="date" id="tarih" name="tarih" required>
+  <div class="form-area">
+    <form
+      id="uretimForm"
+      action="https://script.google.com/macros/s/AKfycbwuJLo1oYX50R9OoPywegWtwCPaRdMmcTpm4U8FnXVqvwaDHpauOp9BMxFWnmbPTOl1/exec"
+      method="POST"
+      target="gizliFrame"
+    >
 
-        <label for="bantAdi">Bant Adı</label>
-        <select id="bantAdi" name="bantAdi" required>
-          <option value="">Seçiniz</option>
-          <option value="BANT-1">BANT-1</option>
-          <option value="BANT-2">BANT-2</option>
-          <option value="BANT-3">BANT-3</option>
-          <option value="BANT-4">BANT-4</option>
-          <option value="BASKI">BASKI</option>
-          <option value="PAKETLEME">PAKETLEME</option>
-        </select>
+      <label>Tarih</label>
+      <input type="date" id="tarih" name="tarih" required>
 
-        <label for="orderNo">Order No</label>
-        <input type="text" id="orderNo" name="orderNo" placeholder="Order no girin" required>
+      <label>Bant</label>
+      <select name="bantAdi" required>
+        <option value="">Seçiniz</option>
+        <option>BANT-1</option>
+        <option>BANT-2</option>
+        <option>BANT-3</option>
+        <option>BANT-4</option>
+        <option>BASKI</option>
+        <option>PAKETLEME</option>
+      </select>
 
-        <label for="adet">Adet</label>
-        <input type="number" id="adet" name="adet" placeholder="Adet girin" min="1" required>
+      <label>Order</label>
+      <input type="text" name="orderNo" required>
 
-        <button type="submit">Kaydet</button>
-      </form>
+      <label>Adet</label>
+      <input type="number" name="adet" min="1" required>
 
-      <iframe name="gizliFrame" style="display:none;"></iframe>
-      <div id="message" class="message"></div>
-    </div>
+      <button>Kaydet</button>
+    </form>
+
+    <iframe name="gizliFrame" style="display:none;"></iframe>
+    <div id="message" class="message"></div>
   </div>
+</div>
 
-  <script>
-    const form = document.getElementById("uretimForm");
-    const message = document.getElementById("message");
+<script>
+const form = document.getElementById("uretimForm");
+const message = document.getElementById("message");
 
-    const tarihInput = document.getElementById("tarih");
-    const bugun = new Date().toISOString().split("T")[0];
-    tarihInput.value = bugun;
+const bugun = new Date().toISOString().split("T")[0];
+document.getElementById("tarih").value = bugun;
 
-    form.addEventListener("submit", function () {
-      message.textContent = "Kaydediliyor...";
-      message.className = "message";
+form.addEventListener("submit", () => {
+  message.textContent = "Kaydediliyor...";
 
-      // Telefon titreşimi (çok güzel detay)
-      if (navigator.vibrate) {
-        navigator.vibrate(100);
-      }
+  if (navigator.vibrate) navigator.vibrate(100);
 
-      setTimeout(() => {
-        message.textContent = "✔ Kayıt alındı";
-        message.className = "message success";
+  setTimeout(() => {
+    message.textContent = "✔ Kayıt alındı";
+    message.className = "message success";
 
-        document.getElementById("orderNo").value = "";
-        document.getElementById("adet").value = "";
-        document.getElementById("bantAdi").value = "";
-        document.getElementById("tarih").value = bugun;
-      }, 1000);
-    });
-  </script>
+    form.reset();
+    document.getElementById("tarih").value = bugun;
+  }, 1000);
+});
+</script>
+
 </body>
 </html>
