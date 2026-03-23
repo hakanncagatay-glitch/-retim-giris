@@ -136,11 +136,41 @@
 <script>
 const form = document.getElementById("uretimForm");
 const message = document.getElementById("message");
+const tarihInput = document.getElementById("tarih");
+const orderInput = document.querySelector('input[name="orderNo"]');
 
 const bugun = new Date().toISOString().split("T")[0];
-document.getElementById("tarih").value = bugun;
+tarihInput.value = bugun;
 
-form.addEventListener("submit", () => {
+// Order alanından çıkınca otomatik DA- ekle
+orderInput.addEventListener("blur", () => {
+  let val = orderInput.value.trim().toUpperCase();
+
+  if (!val) return;
+
+  if (!val.startsWith("DA-")) {
+    val = "DA-" + val.replace(/^DA/i, "").replace(/^-/, "");
+  }
+
+  orderInput.value = val;
+});
+
+form.addEventListener("submit", (e) => {
+  let val = orderInput.value.trim().toUpperCase();
+
+  if (!val) {
+    e.preventDefault();
+    message.textContent = "Order alanı boş olamaz.";
+    message.className = "message";
+    return;
+  }
+
+  if (!val.startsWith("DA-")) {
+    val = "DA-" + val.replace(/^DA/i, "").replace(/^-/, "");
+  }
+
+  orderInput.value = val;
+
   message.textContent = "Kaydediliyor...";
 
   if (navigator.vibrate) navigator.vibrate(100);
@@ -150,7 +180,7 @@ form.addEventListener("submit", () => {
     message.className = "message success";
 
     form.reset();
-    document.getElementById("tarih").value = bugun;
+    tarihInput.value = bugun;
   }, 1000);
 });
 </script>
