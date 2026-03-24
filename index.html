@@ -3,234 +3,186 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- LOGO -->
-  <link rel="icon" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="production.png">
+  <link rel="apple-touch-icon" href="production.png">
+
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Üretim">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Üretim Girişi</title>
 
-  <!-- HTML2CANVAS -->
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
   <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+
     body {
-      margin:0;
-      font-family:Arial;
-      background:#f3f4f6;
-      padding:15px;
+      margin: 0;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
-      max-width:500px;
-      margin:auto;
-      background:white;
-      padding:20px;
-      border-radius:16px;
-      box-shadow:0 8px 24px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
     }
 
-    h2 {
-      text-align:center;
+    .header {
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 18px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .form-area {
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 14px;
+      color: #111827;
     }
 
     input, select {
-      width:100%;
-      padding:12px;
-      margin-top:8px;
-      border-radius:10px;
-      border:1px solid #ddd;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus, select:focus {
+      border-color: #2563eb;
     }
 
     button {
-      width:100%;
-      padding:14px;
-      margin-top:15px;
-      border:none;
-      border-radius:10px;
-      background:#16a34a;
-      color:white;
-      font-weight:bold;
-      cursor:pointer;
+      width: 100%;
+      margin-top: 22px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #16a34a;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .admin {
-      margin-top:25px;
-      padding-top:20px;
-      border-top:1px solid #eee;
+    button:hover {
+      background: #15803d;
     }
 
+    .message {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      min-height: 22px;
+    }
+
+    .success {
+      color: #15803d;
+    }
+
+    .error {
+      color: #dc2626;
+    }
   </style>
 </head>
 
 <body>
+  <div class="container">
+    <div class="header">Üretim Girişi</div>
 
-<div class="container">
+    <div class="form-area">
+      <form
+        id="uretimForm"
+        action="https://script.google.com/macros/s/AKfycbwuJLo1oYX50R9OoPywegWtwCPaRdMmcTpm4U8FnXVqvwaDHpauOp9BMxFWnmbPTOl1/exec"
+        method="POST"
+        target="gizliFrame"
+      >
+        <label for="tarih">Tarih</label>
+        <input type="date" id="tarih" name="tarih" required>
 
-  <h2>Üretim Girişi</h2>
+        <label for="bantAdi">Bant Adı</label>
+        <select id="bantAdi" name="bantAdi" required>
+          <option value="">Seçiniz</option>
+          <option value="BANT-1">BANT-1</option>
+          <option value="BANT-2">BANT-2</option>
+          <option value="BANT-3">BANT-3</option>
+          <option value="BANT-4">BANT-4</option>
+          <option value="BASKI">BASKI</option>
+          <option value="PAKETLEME">PAKETLEME</option>
+        </select>
 
-  <input type="date" id="tarih">
+        <label for="orderNo">Order No</label>
+        <input
+          type="text"
+          id="orderNo"
+          name="orderNo"
+          placeholder="Order no girin"
+          required
+        >
 
-  <select id="bant">
-    <option>BANT-1</option>
-    <option>BANT-2</option>
-    <option>BANT-3</option>
-    <option>BANT-4</option>
-    <option>BASKI</option>
-    <option>PAKETLEME</option>
-  </select>
+        <label for="adet">Adet</label>
+        <input
+          type="number"
+          id="adet"
+          name="adet"
+          placeholder="Adet girin"
+          min="1"
+          required
+        >
 
-  <input type="text" id="order" placeholder="DA- Order">
+        <button type="submit">Kaydet</button>
+      </form>
 
-  <input type="number" id="adet" placeholder="Adet">
-
-  <button onclick="kaydet()">Kaydet</button>
-
-  <!-- ADMIN LOGIN -->
-  <div id="adminLogin" style="margin-top:25px;">
-    <input type="password" id="adminPass" placeholder="Yönetici şifre">
-    <button onclick="adminGiris()">Giriş</button>
-  </div>
-
-  <!-- ADMIN PANEL -->
-  <div id="adminPanel" class="admin" style="display:none;">
-
-    <input type="date" id="adminTarih">
-
-    <button onclick="veriGetir()">Veriyi Getir</button>
-    <button onclick="raporOlustur()">📊 Kurumsal Rapor</button>
-
-    <div id="adminSonuc"></div>
-
-  </div>
-
-</div>
-
-<script>
-
-const scriptBase = "SENİN_SCRIPT_LINKİN";
-
-let adminData = [];
-let secilenTarih = null;
-
-function adminGiris() {
-  if (document.getElementById("adminPass").value === "1234") {
-    document.getElementById("adminLogin").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block";
-  } else {
-    alert("Şifre yanlış");
-  }
-}
-
-function jsonp(url) {
-  return new Promise((resolve) => {
-    const cb = "cb" + Date.now();
-
-    window[cb] = function(data) {
-      resolve(data);
-      delete window[cb];
-      script.remove();
-    };
-
-    const script = document.createElement("script");
-    script.src = url + "&callback=" + cb;
-    document.body.appendChild(script);
-  });
-}
-
-async function veriGetir() {
-
-  const tarih = document.getElementById("adminTarih").value;
-
-  if (!tarih) {
-    alert("Tarih seç");
-    return;
-  }
-
-  secilenTarih = tarih.split("-").reverse().join(".");
-
-  const data = await jsonp(scriptBase + "?action=list&bantAdi=TUM");
-
-  adminData = data.kayitlar;
-
-  const filtre = adminData.filter(x => x.tarih === secilenTarih);
-
-  let toplam = 0;
-  let html = "";
-
-  filtre.forEach(x => {
-    toplam += Number(x.adet);
-    html += `<div>${x.bantAdi} | ${x.orderNo} | ${x.adet}</div>`;
-  });
-
-  html += `<hr><b>TOPLAM: ${toplam}</b>`;
-
-  document.getElementById("adminSonuc").innerHTML = html;
-}
-
-function raporOlustur() {
-
-  const filtre = adminData.filter(x => x.tarih === secilenTarih);
-
-  let toplam = 0;
-  let bant = {};
-
-  filtre.forEach(x => {
-    toplam += Number(x.adet);
-
-    if (!bant[x.bantAdi]) bant[x.bantAdi] = 0;
-    bant[x.bantAdi] += Number(x.adet);
-  });
-
-  let bantHtml = "";
-
-  Object.keys(bant).forEach(b => {
-    bantHtml += `
-      <div style="display:flex; justify-content:space-between;">
-        <span>${b}</span>
-        <b>${bant[b]}</b>
-      </div>
-    `;
-  });
-
-  const html = `
-    <div id="raporKart" style="width:350px; padding:20px; background:white; border-radius:16px;">
-      
-      <div style="text-align:center;">
-        <img src="logo.png" style="height:40px;">
-        <h3>ÜRETİM RAPORU</h3>
-        <div>${secilenTarih}</div>
-      </div>
-
-      <hr>
-
-      ${bantHtml}
-
-      <hr>
-
-      <div style="text-align:center;">
-        <h2>${toplam}</h2>
-        <div>TOPLAM ADET</div>
-      </div>
-
+      <iframe name="gizliFrame" style="display:none;"></iframe>
+      <div id="message" class="message"></div>
     </div>
-  `;
+  </div>
 
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  document.body.appendChild(div);
+  <script>
+    const form = document.getElementById("uretimForm");
+    const message = document.getElementById("message");
 
-  html2canvas(document.getElementById("raporKart")).then(canvas => {
-    const img = canvas.toDataURL();
-    document.body.removeChild(div);
+    const tarihInput = document.getElementById("tarih");
+    const bugun = new Date().toISOString().split("T")[0];
+    tarihInput.value = bugun;
 
-    const w = window.open("");
-    w.document.write(`<img src="${img}" style="width:100%">`);
-  });
+    form.addEventListener("submit", function () {
+      message.textContent = "Kaydediliyor...";
+      message.className = "message";
 
-}
+      setTimeout(() => {
+        message.textContent = "Kayıt gönderildi. Sheet'i kontrol edin.";
+        message.className = "message success";
 
-</script>
-
+        document.getElementById("orderNo").value = "";
+        document.getElementById("adet").value = "";
+        document.getElementById("bantAdi").value = "";
+        document.getElementById("tarih").value = bugun;
+      }, 1200);
+    });
+  </script>
 </body>
 </html>
