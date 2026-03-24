@@ -541,6 +541,92 @@
         message.className = "message error";
       }
     });
+    // 🔴 ADMIN PANEL KODU
+
+let adminData = [];
+
+async function tumVeriyiGetir() {
+  const adminSonuc = document.getElementById("adminSonuc");
+  adminSonuc.innerHTML = "Veriler yükleniyor...";
+
+  try {
+    const data = await jsonp(
+      scriptBase + "?action=list&bantAdi=TUM"
+    );
+
+    if (!data.success) {
+      adminSonuc.innerHTML = "Veri alınamadı.";
+      return;
+    }
+
+    adminData = data.kayitlar || [];
+
+    if (adminData.length === 0) {
+      adminSonuc.innerHTML = "Kayıt bulunamadı.";
+      return;
+    }
+
+    const bugunTr = bugun.split("-").reverse().join(".");
+    const bugunKayitlari = adminData.filter(x => x.tarih === bugunTr);
+
+    if (bugunKayitlari.length === 0) {
+      adminSonuc.innerHTML = "Bugün için kayıt yok.";
+      return;
+    }
+
+    let toplam = 0;
+    let html = `<div style="border:1px solid #ddd; border-radius:12px; padding:12px; background:#f9fafb;">`;
+
+    bugunKayitlari.forEach(x => {
+      toplam += Number(x.adet || 0);
+
+      html += `
+        <div style="padding:8px 0; border-top:1px solid #eee;">
+          ${x.bantAdi} | ${x.orderNo} | ${x.adet} adet
+        </div>
+      `;
+    });
+
+    html += `
+      <div style="margin-top:12px; font-weight:bold; color:#15803d;">
+        TOPLAM: ${toplam} adet
+      </div>
+    </div>`;
+
+    adminSonuc.innerHTML = html;
+
+  } catch (err) {
+    adminSonuc.innerHTML = "Bağlantı hatası.";
+  }
+}
+
+function whatsappPaylas() {
+  if (!adminData || adminData.length === 0) {
+    alert("Önce verileri getir.");
+    return;
+  }
+
+  const bugunTr = bugun.split("-").reverse().join(".");
+  const bugunKayitlari = adminData.filter(x => x.tarih === bugunTr);
+
+  if (bugunKayitlari.length === 0) {
+    alert("Bugün için paylaşılacak kayıt yok.");
+    return;
+  }
+
+  let toplam = 0;
+  let mesaj = "GÜNLÜK ÜRETİM RAPORU\n\n";
+
+  bugunKayitlari.forEach(x => {
+    toplam += Number(x.adet || 0);
+    mesaj += `${x.bantAdi} | ${x.orderNo} | ${x.adet} adet\n`;
+  });
+
+  mesaj += `\nTOPLAM: ${toplam} adet`;
+
+  const url = "https://wa.me/?text=" + encodeURIComponent(mesaj);
+  window.open(url, "_blank");
+}
   </script>
 </body>
 </html>
