@@ -577,6 +577,46 @@
         message.className = "message error";
       }
     });
+  function gunlukRapor() {
+
+  const bant = bantSelect.value;
+  const tarihVal = tarihInput.value;
+
+  if (!bant) {
+    alert("Önce bant seç");
+    return;
+  }
+
+  if (!tarihVal) {
+    alert("Tarih seç");
+    return;
+  }
+
+  const seciliTarih = tarihVal.split("-").reverse().join(".");
+
+  const filtre = sonListeKayitlari.filter(x => x.tarih === seciliTarih);
+
+  if (filtre.length === 0) {
+    alert("Bu gün için veri yok");
+    return;
+  }
+
+  let toplam = 0;
+
+  let msg = `📊 GÜNLÜK ÜRETİM RAPORU\n\n`;
+  msg += `📅 ${seciliTarih}\n`;
+  msg += `🏭 ${bant}\n\n`;
+
+  filtre.forEach(x => {
+    toplam += Number(x.adet);
+    msg += `• ${x.orderNo} → ${x.adet} adet\n`;
+  });
+
+  msg += `\n✅ TOPLAM: ${toplam} adet`;
+
+  window.open("https://wa.me/?text=" + encodeURIComponent(msg));
+}
+      
   </script>
 </body>
 </html>
