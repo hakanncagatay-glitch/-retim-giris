@@ -577,15 +577,9 @@
         message.className = "message error";
       }
     });
-  function gunlukRapor() {
+  async function gunlukRapor() {
 
-  const bant = bantSelect.value;
   const tarihVal = tarihInput.value;
-
-  if (!bant) {
-    alert("Önce bant seç");
-    return;
-  }
 
   if (!tarihVal) {
     alert("Tarih seç");
@@ -594,27 +588,51 @@
 
   const seciliTarih = tarihVal.split("-").reverse().join(".");
 
-  const filtre = sonListeKayitlari.filter(x => x.tarih === seciliTarih);
+  message.textContent = "Rapor hazırlanıyor...";
+  message.className = "message";
 
-  if (filtre.length === 0) {
-    alert("Bu gün için veri yok");
-    return;
+  try {
+
+    const data = await jsonp(
+      scriptBase + "?action=list&bantAdi=TUM"
+    );
+
+    if (!data || !data.kayitlar) {
+      alert("Veri alınamadı");
+      return;
+    }
+
+    const filtre = data.kayitlar.filter(x => x.tarih === seciliTarih);
+
+    if (filtre.length === 0) {
+      alert("Bu gün için veri yok");
+      return;
+    }
+
+    let toplam = 0;
+    let msg = "GÜNLÜK ÜRETİM RAPORU\n\n";
+    msg += "Tarih: " + seciliTarih + "\n\n";
+
+    filtre.forEach(x => {
+      const adet = Number(x.adet || 0);
+      toplam += adet;
+      msg += x.bantAdi + " " + x.orderNo + " " + adet + " adet\n";
+    });
+
+    msg += "\nTOPLAM: " + toplam + " adet";
+
+    const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+
+    // 🔴 EN KRİTİK DÜZELTME
+    window.open(url, "_blank");
+
+    message.textContent = "Rapor hazır";
+    message.className = "message success";
+
+  } catch (e) {
+    alert("Bağlantı hatası");
+    message.className = "message error";
   }
-
-  let toplam = 0;
-
-  let msg = `📊 GÜNLÜK ÜRETİM RAPORU\n\n`;
-  msg += `📅 ${seciliTarih}\n`;
-  msg += `🏭 ${bant}\n\n`;
-
-  filtre.forEach(x => {
-    toplam += Number(x.adet);
-    msg += `• ${x.orderNo} → ${x.adet} adet\n`;
-  });
-
-  msg += `\n✅ TOPLAM: ${toplam} adet`;
-
-  window.open("https://wa.me/?text=" + encodeURIComponent(msg));
 }
       
   </script>
