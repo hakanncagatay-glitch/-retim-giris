@@ -2,631 +2,235 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="production.png">
-  <link rel="apple-touch-icon" href="production.png">
 
-  <meta name="theme-color" content="#0f172a">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Üretim">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <!-- LOGO -->
+  <link rel="icon" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Üretim Girişi</title>
 
+  <!-- HTML2CANVAS -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
   <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
     body {
-      margin: 0;
-      background: #f3f4f6;
-      min-height: 100vh;
-      padding: 16px;
+      margin:0;
+      font-family:Arial;
+      background:#f3f4f6;
+      padding:15px;
     }
+
     .container {
-      width: 100%;
-      max-width: 580px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-      overflow: hidden;
-    }
-    .header {
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      padding: 18px;
-      font-size: 22px;
-      font-weight: bold;
-    }
-    .subheader {
-      margin-top: 6px;
-      font-size: 13px;
-      color: #cbd5e1;
-      font-weight: normal;
-    }
-    .form-area { padding: 20px; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    .stat-card {
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 14px;
-      text-align: center;
-    }
-    .stat-title {
-      font-size: 13px;
-      color: #6b7280;
-      margin-bottom: 6px;
-    }
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: #111827;
+      max-width:500px;
+      margin:auto;
+      background:white;
+      padding:20px;
+      border-radius:16px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.1);
     }
 
-    label {
-      display: block;
-      font-size: 15px;
-      font-weight: 600;
-      margin: 14px 0 8px;
-      color: #111827;
+    h2 {
+      text-align:center;
     }
+
     input, select {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 12px;
-      font-size: 16px;
-      background: white;
-      outline: none;
-    }
-    input:focus, select:focus {
-      border-color: #2563eb;
-    }
-    .order-wrap {
-      display: flex;
-      width: 100%;
-    }
-    .order-prefix {
-      min-width: 68px;
-      padding: 14px 12px;
-      border: 1px solid #d1d5db;
-      border-right: none;
-      border-radius: 12px 0 0 12px;
-      background: #e5e7eb;
-      color: #111827;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-    }
-    .order-input {
-      border-radius: 0 12px 12px 0 !important;
+      width:100%;
+      padding:12px;
+      margin-top:8px;
+      border-radius:10px;
+      border:1px solid #ddd;
     }
 
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 22px;
-    }
     button {
-      flex: 1;
-      padding: 15px;
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .save-btn { background: #16a34a; }
-    .cancel-btn {
-      background: #6b7280;
-      display: none;
+      width:100%;
+      padding:14px;
+      margin-top:15px;
+      border:none;
+      border-radius:10px;
+      background:#16a34a;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
     }
 
-    .message {
-      margin-top: 16px;
-      text-align: center;
-      font-weight: 600;
-      min-height: 22px;
+    .admin {
+      margin-top:25px;
+      padding-top:20px;
+      border-top:1px solid #eee;
     }
-    .success { color: #15803d; }
-    .error { color: #dc2626; }
 
-    .kayitlar {
-      margin-top: 24px;
-      border-top: 1px solid #e5e7eb;
-      padding-top: 20px;
-    }
-    .kayitlar h3 {
-      margin: 0 0 8px;
-      font-size: 19px;
-      color: #111827;
-    }
-    .aciklama {
-      font-size: 13px;
-      color: #6b7280;
-      margin-bottom: 14px;
-    }
-    .kayit-listesi {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .gun-blok {
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      overflow: hidden;
-      background: #fafafa;
-    }
-    .gun-baslik {
-      background: #e5e7eb;
-      color: #111827;
-      font-weight: bold;
-      padding: 10px 12px;
-      font-size: 15px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .gun-toplam {
-      color: #15803d;
-      font-size: 14px;
-    }
-    .kayit-satir {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px;
-      border-top: 1px solid #f0f0f0;
-      font-size: 14px;
-      color: #374151;
-      background: white;
-      align-items: center;
-    }
-    .kayit-sol {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .kayit-order {
-      font-weight: bold;
-      color: #111827;
-    }
-    .kayit-bant {
-      font-size: 12px;
-      color: #6b7280;
-    }
-    .kayit-sag {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .kayit-adet {
-      font-weight: bold;
-      color: #15803d;
-      white-space: nowrap;
-    }
-    .duzenle-btn {
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-    .bos {
-      text-align: center;
-      padding: 18px;
-      border: 1px dashed #d1d5db;
-      border-radius: 12px;
-      color: #6b7280;
-      background: #fafafa;
-    }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="header">
-      Üretim Girişi
-      <div class="subheader">Bant seç, kayıt gir, geçmişi gör</div>
-    </div>
 
-    <div class="form-area">
-      <div class="stats">
-        <div class="stat-card">
-          <div class="stat-title">Bugün Toplam</div>
-          <div class="stat-value" id="bugunToplam">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-title">Bu Ay Toplam</div>
-          <div class="stat-value" id="ayToplam">0</div>
-        </div>
-      </div>
+<div class="container">
 
-      <form id="uretimForm">
-        <input type="hidden" id="editRowNo">
+  <h2>Üretim Girişi</h2>
 
-        <label for="tarih">Tarih</label>
-        <input type="date" id="tarih" name="tarih" required>
+  <input type="date" id="tarih">
 
-        <label for="bantAdi">Bant</label>
-        <select id="bantAdi" name="bantAdi" required>
-          <option value="">Seçiniz</option>
-          <option value="BANT-1">BANT-1</option>
-          <option value="BANT-2">BANT-2</option>
-          <option value="BANT-3">BANT-3</option>
-          <option value="BANT-4">BANT-4</option>
-          <option value="BASKI">BASKI</option>
-          <option value="PAKETLEME">PAKETLEME</option>
-        </select>
+  <select id="bant">
+    <option>BANT-1</option>
+    <option>BANT-2</option>
+    <option>BANT-3</option>
+    <option>BANT-4</option>
+    <option>BASKI</option>
+    <option>PAKETLEME</option>
+  </select>
 
-        <label for="orderSuffix">Order</label>
-        <div class="order-wrap">
-          <div class="order-prefix">DA-</div>
-          <input
-            type="text"
-            id="orderSuffix"
-            class="order-input"
-            placeholder="Order no girin"
-            autocomplete="off"
-            required
-          >
-        </div>
+  <input type="text" id="order" placeholder="DA- Order">
 
-        <label for="adet">Adet</label>
-        <input type="number" id="adet" name="adet" min="1" required>
+  <input type="number" id="adet" placeholder="Adet">
 
-        <div class="btn-row">
-          <button type="submit" class="save-btn" id="saveBtn">Kaydet</button>
-          <button type="button" class="cancel-btn" id="cancelBtn">İptal</button>
-        </div>
-      </form>
+  <button onclick="kaydet()">Kaydet</button>
 
-      <div id="message" class="message"></div>
-<hr style="margin:25px 0">
-
-<h3>Yönetici Paneli</h3>
-
-<div style="display:flex; gap:10px; margin-bottom:10px;">
-  <button onclick="tumVeriyiGetir()">Bugünü Getir</button>
-  <button onclick="whatsappPaylas()">WhatsApp Paylaş</button>
-</div>
-
-<div id="adminSonuc"></div>
-      <div class="kayitlar">
-        <h3>Seçili Bant Geçmişi</h3>
-        <div class="aciklama" id="listeAciklama">
-          Bant seçildiğinde son 30 gün kayıtları gün gün gösterilir.
-        </div>
-        <div class="kayit-listesi" id="kayitListesi">
-          <div class="bos">Önce bant seçiniz.</div>
-        </div>
-      </div>
-    </div>
+  <!-- ADMIN LOGIN -->
+  <div id="adminLogin" style="margin-top:25px;">
+    <input type="password" id="adminPass" placeholder="Yönetici şifre">
+    <button onclick="adminGiris()">Giriş</button>
   </div>
 
-  <script>
-    const scriptBase = "https://script.google.com/macros/s/AKfycbwuJLo1oYX50R9OoPywegWtwCPaRdMmcTpm4U8FnXVqvwaDHpauOp9BMxFWnmbPTOl1/exec";
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="admin" style="display:none;">
 
-    const form = document.getElementById("uretimForm");
-    const message = document.getElementById("message");
-    const tarihInput = document.getElementById("tarih");
-    const bantSelect = document.getElementById("bantAdi");
-    const orderSuffixInput = document.getElementById("orderSuffix");
-    const adetInput = document.getElementById("adet");
-    const kayitListesi = document.getElementById("kayitListesi");
-    const listeAciklama = document.getElementById("listeAciklama");
-    const bugunToplamEl = document.getElementById("bugunToplam");
-    const ayToplamEl = document.getElementById("ayToplam");
-    const editRowNoInput = document.getElementById("editRowNo");
-    const saveBtn = document.getElementById("saveBtn");
-    const cancelBtn = document.getElementById("cancelBtn");
+    <input type="date" id="adminTarih">
 
-    const bugun = new Date().toISOString().split("T")[0];
-    tarihInput.value = bugun;
-    tarihInput.max = bugun;
+    <button onclick="veriGetir()">Veriyi Getir</button>
+    <button onclick="raporOlustur()">📊 Kurumsal Rapor</button>
 
-    function jsonp(url) {
-      return new Promise((resolve, reject) => {
-        const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    <div id="adminSonuc"></div>
 
-        window[cbName] = function(data) {
-          resolve(data);
-          cleanup();
-        };
+  </div>
 
-        function cleanup() {
-          delete window[cbName];
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
+</div>
 
-        const script = document.createElement("script");
-        script.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cbName + "&_=" + Date.now();
-        script.onerror = function() {
-          reject(new Error("Bağlantı hatası"));
-          cleanup();
-        };
+<script>
 
-        document.body.appendChild(script);
-      });
-    }
-
-    function formuTemizle() {
-      const seciliBant = bantSelect.value;
-      form.reset();
-      tarihInput.value = bugun;
-      tarihInput.max = bugun;
-      bantSelect.value = seciliBant;
-      editRowNoInput.value = "";
-      saveBtn.textContent = "Kaydet";
-      cancelBtn.style.display = "none";
-    }
-
-    function duzenlemeModu(rowNo, tarih, bant, orderNo, adet) {
-      editRowNoInput.value = rowNo;
-      tarihInput.value = tarih.split(".").reverse().join("-");
-      bantSelect.value = bant;
-      orderSuffixInput.value = (orderNo || "").replace(/^DA-/, "");
-      adetInput.value = adet;
-      saveBtn.textContent = "Güncelle";
-      cancelBtn.style.display = "block";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    cancelBtn.addEventListener("click", () => {
-      formuTemizle();
-      message.textContent = "";
-    });
-
-    function gruplandir(kayitlar) {
-      const gruplar = {};
-      kayitlar.forEach(k => {
-        if (!gruplar[k.tarih]) gruplar[k.tarih] = [];
-        gruplar[k.tarih].push(k);
-      });
-      return gruplar;
-    }
-
-    function listeyiCiz(veriler) {
-      const kayitlar = veriler.kayitlar || [];
-      bugunToplamEl.textContent = veriler.bugunToplam || 0;
-      ayToplamEl.textContent = veriler.ayToplam || 0;
-
-      if (!kayitlar.length) {
-        kayitListesi.innerHTML = '<div class="bos">Bu bant için son 30 günde kayıt bulunamadı.</div>';
-        return;
-      }
-
-      const gruplar = gruplandir(kayitlar);
-      const tarihler = Object.keys(gruplar);
-
-      let html = "";
-
-      tarihler.forEach(tarih => {
-        const gunKayitlari = gruplar[tarih];
-        const gunToplam = gunKayitlari.reduce((t, k) => t + Number(k.adet || 0), 0);
-
-        html += `
-          <div class="gun-blok">
-            <div class="gun-baslik">
-              <span>${tarih}</span>
-              <span class="gun-toplam">${gunToplam} adet</span>
-            </div>
-        `;
-
-        gunKayitlari.forEach(kayit => {
-          html += `
-            <div class="kayit-satir">
-              <div class="kayit-sol">
-                <div class="kayit-order">${kayit.orderNo || "-"}</div>
-                <div class="kayit-bant">${kayit.bantAdi || "-"}</div>
-              </div>
-              <div class="kayit-sag">
-                <div class="kayit-adet">${kayit.adet || 0} adet</div>
-                <button
-                  type="button"
-                  class="duzenle-btn"
-                  onclick="duzenlemeModu(${kayit.rowNo}, '${kayit.tarih}', '${kayit.bantAdi}', '${kayit.orderNo}', '${kayit.adet}')"
-                >
-                  Düzenle
-                </button>
-              </div>
-            </div>
-          `;
-        });
-
-        html += `</div>`;
-      });
-
-      kayitListesi.innerHTML = html;
-    }
-
-    window.duzenlemeModu = duzenlemeModu;
-
-    async function listeyiYukle() {
-      const bant = bantSelect.value;
-
-      if (!bant) {
-        kayitListesi.innerHTML = '<div class="bos">Önce bant seçiniz.</div>';
-        listeAciklama.textContent = "Bant seçildiğinde son 30 gün kayıtları gün gün gösterilir.";
-        bugunToplamEl.textContent = "0";
-        ayToplamEl.textContent = "0";
-        return;
-      }
-
-      listeAciklama.textContent = bant + " için son 30 gün kayıtları gösteriliyor.";
-      kayitListesi.innerHTML = '<div class="bos">Kayıtlar yükleniyor...</div>';
-
-      try {
-        const data = await jsonp(
-          scriptBase + "?action=list&bantAdi=" + encodeURIComponent(bant)
-        );
-
-        if (!data.success) {
-          kayitListesi.innerHTML = '<div class="bos">' + (data.message || "Liste alınamadı.") + '</div>';
-          return;
-        }
-
-        listeyiCiz(data);
-      } catch (err) {
-        kayitListesi.innerHTML = '<div class="bos">Liste alınamadı.</div>';
-      }
-    }
-
-    bantSelect.addEventListener("change", listeyiYukle);
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const tarih = tarihInput.value;
-      const bantAdi = bantSelect.value;
-      const suffix = orderSuffixInput.value.trim().toUpperCase();
-      const adet = adetInput.value;
-      const editRowNo = editRowNoInput.value;
-
-      if (!tarih || !bantAdi || !suffix || !adet) {
-        message.textContent = "Tüm alanları doldurun.";
-        message.className = "message error";
-        return;
-      }
-
-      if (tarih > bugun) {
-        message.textContent = "Gelecek tarihli kayıt girilemez.";
-        message.className = "message error";
-        return;
-      }
-
-      const orderNo = "DA-" + suffix.replace(/^DA-?/i, "");
-      const action = editRowNo ? "update" : "save";
-
-      message.textContent = "Kaydediliyor...";
-      message.className = "message";
-
-      if (navigator.vibrate) navigator.vibrate(100);
-
-      try {
-        const data = await jsonp(
-          scriptBase
-          + "?action=" + action
-          + "&tarih=" + encodeURIComponent(tarih)
-          + "&bantAdi=" + encodeURIComponent(bantAdi)
-          + "&orderNo=" + encodeURIComponent(orderNo)
-          + "&adet=" + encodeURIComponent(adet)
-          + (editRowNo ? "&rowNo=" + encodeURIComponent(editRowNo) : "")
-        );
-
-        if (!data.success) {
-          message.textContent = data.message || "Kayıt başarısız.";
-          message.className = "message error";
-          return;
-        }
-
-        message.textContent = data.message || "✔ Kayıt alındı";
-        message.className = "message success";
-
-        formuTemizle();
-        await listeyiYukle();
-
-      } catch (err) {
-        message.textContent = "Bağlantı hatası.";
-        message.className = "message error";
-      }
-    });
-    // 🔴 ADMIN PANEL KODU
+const scriptBase = "https://script.google.com/macros/s/AKfycbwuJLo1oYX50R90oPywegWtwCPaRdMmcTpm4U8FnXVqvwaDHpauOp9BMxFWnmbPTOl1/exec";
 
 let adminData = [];
+let secilenTarih = null;
 
-async function tumVeriyiGetir() {
-  const adminSonuc = document.getElementById("adminSonuc");
-  adminSonuc.innerHTML = "Veriler yükleniyor...";
-
-  try {
-    const data = await jsonp(
-      scriptBase + "?action=list&bantAdi=TUM"
-    );
-
-    if (!data.success) {
-      adminSonuc.innerHTML = "Veri alınamadı.";
-      return;
-    }
-
-    adminData = data.kayitlar || [];
-
-    if (adminData.length === 0) {
-      adminSonuc.innerHTML = "Kayıt bulunamadı.";
-      return;
-    }
-
-    const bugunTr = bugun.split("-").reverse().join(".");
-    const bugunKayitlari = adminData.filter(x => x.tarih === bugunTr);
-
-    if (bugunKayitlari.length === 0) {
-      adminSonuc.innerHTML = "Bugün için kayıt yok.";
-      return;
-    }
-
-    let toplam = 0;
-    let html = `<div style="border:1px solid #ddd; border-radius:12px; padding:12px; background:#f9fafb;">`;
-
-    bugunKayitlari.forEach(x => {
-      toplam += Number(x.adet || 0);
-
-      html += `
-        <div style="padding:8px 0; border-top:1px solid #eee;">
-          ${x.bantAdi} | ${x.orderNo} | ${x.adet} adet
-        </div>
-      `;
-    });
-
-    html += `
-      <div style="margin-top:12px; font-weight:bold; color:#15803d;">
-        TOPLAM: ${toplam} adet
-      </div>
-    </div>`;
-
-    adminSonuc.innerHTML = html;
-
-  } catch (err) {
-    adminSonuc.innerHTML = "Bağlantı hatası.";
+function adminGiris() {
+  if (document.getElementById("adminPass").value === "1234") {
+    document.getElementById("adminLogin").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+  } else {
+    alert("Şifre yanlış");
   }
 }
 
-function whatsappPaylas() {
-  if (!adminData || adminData.length === 0) {
-    alert("Önce verileri getir.");
+function jsonp(url) {
+  return new Promise((resolve) => {
+    const cb = "cb" + Date.now();
+
+    window[cb] = function(data) {
+      resolve(data);
+      delete window[cb];
+      script.remove();
+    };
+
+    const script = document.createElement("script");
+    script.src = url + "&callback=" + cb;
+    document.body.appendChild(script);
+  });
+}
+
+async function veriGetir() {
+
+  const tarih = document.getElementById("adminTarih").value;
+
+  if (!tarih) {
+    alert("Tarih seç");
     return;
   }
 
-  const bugunTr = bugun.split("-").reverse().join(".");
-  const bugunKayitlari = adminData.filter(x => x.tarih === bugunTr);
+  secilenTarih = tarih.split("-").reverse().join(".");
 
-  if (bugunKayitlari.length === 0) {
-    alert("Bugün için paylaşılacak kayıt yok.");
-    return;
-  }
+  const data = await jsonp(scriptBase + "?action=list&bantAdi=TUM");
+
+  adminData = data.kayitlar;
+
+  const filtre = adminData.filter(x => x.tarih === secilenTarih);
 
   let toplam = 0;
-  let mesaj = "GÜNLÜK ÜRETİM RAPORU\n\n";
+  let html = "";
 
-  bugunKayitlari.forEach(x => {
-    toplam += Number(x.adet || 0);
-    mesaj += `${x.bantAdi} | ${x.orderNo} | ${x.adet} adet\n`;
+  filtre.forEach(x => {
+    toplam += Number(x.adet);
+    html += `<div>${x.bantAdi} | ${x.orderNo} | ${x.adet}</div>`;
   });
 
-  mesaj += `\nTOPLAM: ${toplam} adet`;
+  html += `<hr><b>TOPLAM: ${toplam}</b>`;
 
-  const url = "https://wa.me/?text=" + encodeURIComponent(mesaj);
-  window.open(url, "_blank");
+  document.getElementById("adminSonuc").innerHTML = html;
 }
-  </script>
+
+function raporOlustur() {
+
+  const filtre = adminData.filter(x => x.tarih === secilenTarih);
+
+  let toplam = 0;
+  let bant = {};
+
+  filtre.forEach(x => {
+    toplam += Number(x.adet);
+
+    if (!bant[x.bantAdi]) bant[x.bantAdi] = 0;
+    bant[x.bantAdi] += Number(x.adet);
+  });
+
+  let bantHtml = "";
+
+  Object.keys(bant).forEach(b => {
+    bantHtml += `
+      <div style="display:flex; justify-content:space-between;">
+        <span>${b}</span>
+        <b>${bant[b]}</b>
+      </div>
+    `;
+  });
+
+  const html = `
+    <div id="raporKart" style="width:350px; padding:20px; background:white; border-radius:16px;">
+      
+      <div style="text-align:center;">
+        <img src="logo.png" style="height:40px;">
+        <h3>ÜRETİM RAPORU</h3>
+        <div>${secilenTarih}</div>
+      </div>
+
+      <hr>
+
+      ${bantHtml}
+
+      <hr>
+
+      <div style="text-align:center;">
+        <h2>${toplam}</h2>
+        <div>TOPLAM ADET</div>
+      </div>
+
+    </div>
+  `;
+
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  document.body.appendChild(div);
+
+  html2canvas(document.getElementById("raporKart")).then(canvas => {
+    const img = canvas.toDataURL();
+    document.body.removeChild(div);
+
+    const w = window.open("");
+    w.document.write(`<img src="${img}" style="width:100%">`);
+  });
+
+}
+
+</script>
+
 </body>
 </html>
