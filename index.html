@@ -624,8 +624,7 @@
     const url = "https://wa.me/?text=" + encodeURIComponent(msg);
 
     // 🔴 EN KRİTİK DÜZELTME
-    window.open(url, "_blank");
-
+  window.location.href=url;
     message.textContent = "Rapor hazır";
     message.className = "message success";
 
